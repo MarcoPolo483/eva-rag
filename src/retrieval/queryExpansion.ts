@@ -1,4 +1,3 @@
-import type { SparseIndex, Retrieved } from "../types.js";
 import { defaultStopwords } from "../util/stopwords.js";
 
 /**

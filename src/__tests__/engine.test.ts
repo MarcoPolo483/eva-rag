@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { RAGEngine } from "../pipeline/engine.js";
 import { TokenChunker } from "../chunkers/tokenChunker.js";
 import { NaiveEmbedding } from "../embeddings/naive.js";

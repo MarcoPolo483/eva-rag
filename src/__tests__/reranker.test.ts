@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { SimpleReranker } from "../rerankers/simpleReranker.js";
 
 describe("SimpleReranker", () => {

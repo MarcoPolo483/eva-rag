@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { NaiveHyDEGenerator, hydeQuery } from "../retrieval/hyde.js";
 import { InMemoryVectorStore } from "../vector/inMemory.js";
 import { NaiveEmbedding } from "../embeddings/naive.js";

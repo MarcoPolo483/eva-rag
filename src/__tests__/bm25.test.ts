@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { BM25Index } from "../sparse/bm25.js";
 
 describe("BM25Index", () => {

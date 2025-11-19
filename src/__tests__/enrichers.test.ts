@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { enrichChunks, dedupeChunksByHash } from "../pipeline/enrichers.js";
 
 describe("Enrichers", () => {

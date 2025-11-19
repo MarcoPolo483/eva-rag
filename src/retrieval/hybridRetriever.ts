@@ -1,5 +1,5 @@
 import type { Retriever, Retrieved, VectorStore, Embeddings, SparseIndex } from "../types.js";
-import { InMemoryVectorStore } from "../vector/inMemory.js";
+import type { InMemoryVectorStore } from "../vector/inMemory.js";
 
 export type HybridOptions = {
   alpha?: number; // dense weight

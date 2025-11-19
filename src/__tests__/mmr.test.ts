@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { MMRReranker } from "../rerankers/mmrReranker.js";
 import { NaiveEmbedding } from "../embeddings/naive.js";
 

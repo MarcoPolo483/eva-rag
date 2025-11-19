@@ -1,4 +1,4 @@
-import type { Embeddings, Retrieved, VectorStore } from "../types.js";
+import type { Embeddings, VectorStore } from "../types.js";
 
 export interface TextGenerator {
   generateHypotheticalAnswer(query: string): Promise<string>;

@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { InMemoryVectorStore } from "../vector/inMemory.js";
 
 describe("InMemoryVectorStore", () => {

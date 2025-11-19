@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { HybridRetriever } from "../retrieval/hybridRetriever.js";
 import { BM25Index } from "../sparse/bm25.js";
 import { InMemoryVectorStore } from "../vector/inMemory.js";

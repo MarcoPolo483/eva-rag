@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -101,90 +101,90 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export type Doc = { id: string; text: string; metadata?: Record&lt;string, unknown&gt; };
-&nbsp;
-export type Chunk = {
-  id: string;
-  docId: string;
-  text: string;
-  metadata?: Record&lt;string, unknown&gt;;
-};
-&nbsp;
-export interface Chunker {
-  chunk(doc: Doc): Promise&lt;Chunk[]&gt;;
-}
-&nbsp;
-export interface Embeddings {
-  embed(texts: string[], options?: Record&lt;string, unknown&gt;): Promise&lt;number[][]&gt;;
-  dimensions?: number;
-}
-&nbsp;
-export type Vector = number[];
-&nbsp;
-export interface VectorStore {
-  upsert(items: { id: string; text: string; vector: Vector; metadata?: Record&lt;string, unknown&gt; }[]): Promise&lt;void&gt;;
-  query(vector: Vector, k: number, filter?: Record&lt;string, unknown&gt;): Promise&lt;{ id: string; score: number; metadata?: Record&lt;string, unknown&gt; }[]&gt;;
-}
-&nbsp;
-export interface SparseIndex {
-  add(chunks: Chunk[]): Promise&lt;void&gt;;
-  search(query: string, k: number): Promise&lt;{ id: string; score: number }[]&gt;;
-}
-&nbsp;
-export type Retrieved = { id: string; score: number; text?: string; metadata?: Record&lt;string, unknown&gt; };
-&nbsp;
-export interface Retriever {
-  query(text: string, k: number, filter?: Record&lt;string, unknown&gt;): Promise&lt;Retrieved[]&gt;;
-}
-&nbsp;
-export interface Reranker {
-  rerank(query: string, results: Retrieved[], topK: number): Promise&lt;Retrieved[]&gt;;
-}</pre></td></tr></table></pre>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >export type Doc = { id: string; text: string; metadata?: Record&lt;string, unknown&gt; };</span></span></span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export type Chunk = {</span>
+<span class="cstat-no" title="statement not covered" >  id: string;</span>
+<span class="cstat-no" title="statement not covered" >  docId: string;</span>
+<span class="cstat-no" title="statement not covered" >  text: string;</span>
+<span class="cstat-no" title="statement not covered" >  metadata?: Record&lt;string, unknown&gt;;</span>
+<span class="cstat-no" title="statement not covered" >};</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export interface Chunker {</span>
+<span class="cstat-no" title="statement not covered" >  chunk(doc: Doc): Promise&lt;Chunk[]&gt;;</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export interface Embeddings {</span>
+<span class="cstat-no" title="statement not covered" >  embed(texts: string[], options?: Record&lt;string, unknown&gt;): Promise&lt;number[][]&gt;;</span>
+<span class="cstat-no" title="statement not covered" >  dimensions?: number;</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export type Vector = number[];</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export interface VectorStore {</span>
+<span class="cstat-no" title="statement not covered" >  upsert(items: { id: string; text: string; vector: Vector; metadata?: Record&lt;string, unknown&gt; }[]): Promise&lt;void&gt;;</span>
+<span class="cstat-no" title="statement not covered" >  query(vector: Vector, k: number, filter?: Record&lt;string, unknown&gt;): Promise&lt;{ id: string; score: number; metadata?: Record&lt;string, unknown&gt; }[]&gt;;</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export interface SparseIndex {</span>
+<span class="cstat-no" title="statement not covered" >  add(chunks: Chunk[]): Promise&lt;void&gt;;</span>
+<span class="cstat-no" title="statement not covered" >  search(query: string, k: number): Promise&lt;{ id: string; score: number }[]&gt;;</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export type Retrieved = { id: string; score: number; text?: string; metadata?: Record&lt;string, unknown&gt; };</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export interface Retriever {</span>
+<span class="cstat-no" title="statement not covered" >  query(text: string, k: number, filter?: Record&lt;string, unknown&gt;): Promise&lt;Retrieved[]&gt;;</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >export interface Reranker {</span>
+<span class="cstat-no" title="statement not covered" >  rerank(query: string, results: Retrieved[], topK: number): Promise&lt;Retrieved[]&gt;;</span>
+<span class="cstat-no" title="statement not covered" >}</span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-13T22:14:43.951Z
+                at 2025-11-19T17:43:14.225Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

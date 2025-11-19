@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { expandQueryPRF } from "../retrieval/queryExpansion.js";
 
 describe("PRF Query Expansion", () => {

@@ -8,7 +8,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     files: ["**/*.ts"],
-    ignores: ["dist", "coverage", "node_modules", "src/examples"],
+    ignores: ["dist", "coverage", "node_modules", "src/examples", "vitest.config.ts"],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -22,7 +22,15 @@ export default tseslint.config(
       "import/order": ["error", { "newlines-between": "always" }],
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-floating-promises": "warn",
+      "@typescript-eslint/no-explicit-any": "warn",
       "no-console": "off"
+    }
+  },
+  {
+    files: ["src/__tests__/**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off"
     }
   },
   prettier

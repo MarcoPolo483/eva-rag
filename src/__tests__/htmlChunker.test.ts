@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { HtmlChunker } from "../chunkers/htmlChunker.js";
 
 describe("HtmlChunker", () => {

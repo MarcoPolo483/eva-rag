@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+
 import { precisionAtK, recallAtK, mrrAtK, macroAverage } from "../eval/metrics.js";
 
 describe("Evaluation Metrics", () => {

@@ -1,4 +1,4 @@
-import { InMemoryVectorStore } from "../vector/inMemory.js";
+import type { InMemoryVectorStore } from "../vector/inMemory.js";
 
 export type VectorSnapshot = {
   items: { id: string; text: string; vector: number[]; metadata?: Record<string, unknown> }[];

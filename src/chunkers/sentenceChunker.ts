@@ -46,6 +46,6 @@ export class SentenceChunker implements Chunker {
 function splitSentences(t: string): string[] {
   const parts = t
     .replace(/\s+/g, " ")
-    .split(/(?<=[\.!\?])\s+(?=[A-Z0-9])/g);
+    .split(/(?<=[.!?])\s+(?=[A-Z0-9])/g);
   return parts.map((p) => p.trim()).filter(Boolean);
 }
