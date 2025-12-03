@@ -1,3 +1,3 @@
 # eva-rag
 
-Initial scaffold for EVA module: eva-rag.
+Initial scaffold for RAG ingestion, indexing, and retrieval.
