@@ -2,32 +2,77 @@
   "$schema": "https://marcopolo483.github.io/eva-suite/schemas/eva-memory-v1.json",
   "version": "1.0.0",
   "repo": {
-    "name": "REPO_NAME_PLACEHOLDER",
-    "pod": "POD_PLACEHOLDER",
-    "purpose": "DESCRIPTION_PLACEHOLDER",
+    "name": "eva-rag",
+    "pod": "POD-F",
+    "purpose": "Retrieval-Augmented Generation engine for EVA Suite. Document ingestion (PDF/DOCX/TXT), text chunking (500 tokens, 50 overlap), vector embedding (Azure OpenAI text-embedding-3-small), hybrid search (vector + BM25), reranking (cross-encoder), citation extraction. Reference implementation: OpenWebUI retrieval patterns + PubSec Info Assistant Azure AI Search.",
     "status": "active",
-    "owner": "OWNER_PLACEHOLDER",
-    "dependencies": [],
-    "lastUpdated": "2025-11-29T00:00:00Z"
+    "owner": "P04-LIB + P06-RAG",
+    "dependencies": [
+      "eva-orchestrator (specification in docs/SPECIFICATION.md)",
+      "eva-core (Document entity, Query entity)",
+      "Azure AI Search (vector index, hybrid search)",
+      "Azure OpenAI (text-embedding-3-small)",
+      "Azure Blob Storage (document files)",
+      "Redis (embedding cache)",
+      "FastAPI (API framework)",
+      "LangChain (text splitting, retrieval)",
+      "Sentence Transformers (reranking)"
+    ],
+    "lastUpdated": "2025-12-07T00:00:00Z"
   },
   "context": {
-    "summary": "SUMMARY_PLACEHOLDER",
-    "keyFiles": [],
-    "currentPhase": "Sprint 4 - Stabilization & Demo Prep",
+    "summary": "CRITICAL: BEFORE ANY WORK, read complete specification: docs/SPECIFICATION.md (1058 lines). Contains ALL RAG pipeline requirements (document ingestion, chunking, embedding, hybrid search, reranking, citation extraction), 12 quality gates, and 4-phase implementation plan (8 weeks). Use OpenWebUI retrieval patterns (PyPDF2 loaders, LangChain splitters) + PubSec Info Assistant patterns (Azure AI Search hybrid search, semantic reranker). Follow specification TO THE LETTER. No shortcuts. All 12 quality gates must pass (95% test coverage, 90% retrieval accuracy, < 500ms latency p95, bilingual EN-CA/FR-CA support).",
+    "keyFiles": [
+      "docs/SPECIFICATION.md (MUST READ FIRST - 1058 lines)",
+      "src/eva_rag/api/endpoints/ingest.py (POST /api/v1/rag/ingest)",
+      "src/eva_rag/api/endpoints/search.py (POST /api/v1/rag/search)",
+      "src/eva_rag/services/chunking_service.py (RecursiveCharacterTextSplitter)",
+      "src/eva_rag/services/embedding_service.py (Azure OpenAI embeddings)",
+      "src/eva_rag/services/search_service.py (Azure AI Search hybrid search)",
+      "src/eva_rag/services/reranking_service.py (cross-encoder reranking)"
+    ],
+    "currentPhase": "BLOCKED: Must read docs/SPECIFICATION.md FIRST before any implementation work",
     "openIssues": 0,
-    "blockers": []
+    "blockers": [
+      "CRITICAL: Cannot start implementation without reading complete specification in docs/SPECIFICATION.md",
+      "CRITICAL: All 12 quality gates must pass (95% coverage, 90% accuracy, < 500ms latency, bilingual)",
+      "CRITICAL: Follow OpenWebUI + PubSec Info Assistant patterns exactly (proven Azure AI Search hybrid search)"
+    ]
   },
   "quality": {
     "testCoverage": 0,
     "lintWarnings": 0,
     "typeScriptStrict": false,
     "wcagCompliance": "N/A",
-    "bilingualStatus": "N/A"
+    "bilingualStatus": "EN-CA/FR-CA (language detection, chunking, search filters)"
   },
   "memory": {
-    "lessons": [],
-    "tools": [],
-    "patterns": []
+    "lessons": [
+      "Use LangChain RecursiveCharacterTextSplitter for semantic chunking (500 tokens, 50 overlap)",
+      "Batch embed 100 chunks per Azure OpenAI API call (reduce latency from 10s to 2s)",
+      "Cache embeddings in Redis by content hash (60%+ cache hit rate, reduce costs)",
+      "Hybrid search (vector + BM25) with RRF fusion outperforms pure vector search",
+      "Rerank top-20 results with cross-encoder (filter < 0.5 relevance score)"
+    ],
+    "tools": [
+      "FastAPI (async API endpoints, OpenAPI auto-docs)",
+      "LangChain (text splitting, retrieval patterns)",
+      "Azure AI Search (vector index, hybrid search, semantic reranker)",
+      "Azure OpenAI (text-embedding-3-small, 1536 dims)",
+      "Sentence Transformers (ms-marco-MiniLM-L-6-v2 cross-encoder)",
+      "PyPDF2 + python-docx (document loaders)",
+      "Redis (embedding cache)",
+      "pytest + coverage.py (testing, 95% coverage)"
+    ],
+    "patterns": [
+      "Document Ingestion: Upload → Extract → Detect Language → Chunk → Embed → Index",
+      "Chunking: RecursiveCharacterTextSplitter (500 tokens, 50 overlap, sentence boundaries)",
+      "Embedding: Batch 100 chunks, cache by hash (Redis 7-day TTL)",
+      "Hybrid Search: Vector (cosine similarity) + Keyword (BM25) → RRF fusion (k=60)",
+      "Reranking: Cross-encoder top-20 → filter < 0.5 → return top-K",
+      "Citation: Extract document_name, page_number, content snippet for each result",
+      "Tenant Isolation: Filter all operations by space_id + tenant_id"
+    ]
   },
   "reports": {
     "lastHousekeeping": null,
@@ -42,10 +87,10 @@
     "backupPath": ".eva-cache/backups/"
   },
   "_metadata": {
-    "createdBy": "TASK-002 Bootstrap Memory Template",
-    "createdAt": "2025-11-29T00:00:00Z",
+    "createdBy": "EVA-Orchestrator Specification Generation (eva-rag RAG engine)",
+    "createdAt": "2025-12-07T00:00:00Z",
     "templateVersion": "1.0.0",
-    "lastModifiedBy": null,
-    "lastModifiedAt": null
+    "lastModifiedBy": "GitHub Copilot (P04-LIB + P06-RAG)",
+    "lastModifiedAt": "2025-12-07T00:00:00Z"
   }
 }
