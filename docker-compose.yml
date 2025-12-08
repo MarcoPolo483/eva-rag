@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  eva-rag:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eva-rag
+    ports:
+      - "8000:8000"
+    environment:
+      # Azure Configuration
+      - AZURE_STORAGE_ACCOUNT_NAME=${AZURE_STORAGE_ACCOUNT_NAME}
+      - AZURE_STORAGE_ACCOUNT_KEY=${AZURE_STORAGE_ACCOUNT_KEY}
+      - AZURE_STORAGE_CONTAINER_NAME=${AZURE_STORAGE_CONTAINER_NAME:-eva-rag-documents}
+      
+      - AZURE_COSMOS_ENDPOINT=${AZURE_COSMOS_ENDPOINT}
+      - AZURE_COSMOS_KEY=${AZURE_COSMOS_KEY}
+      - AZURE_COSMOS_DATABASE_NAME=${AZURE_COSMOS_DATABASE_NAME:-eva-rag}
+      - AZURE_COSMOS_CONTAINER_NAME=${AZURE_COSMOS_CONTAINER_NAME:-document-metadata}
+      
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
+      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+      - AZURE_OPENAI_EMBEDDING_DEPLOYMENT=${AZURE_OPENAI_EMBEDDING_DEPLOYMENT:-text-embedding-ada-002}
+      - AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION:-2024-02-01}
+      
+      - AZURE_SEARCH_ENDPOINT=${AZURE_SEARCH_ENDPOINT}
+      - AZURE_SEARCH_ADMIN_KEY=${AZURE_SEARCH_ADMIN_KEY}
+      - AZURE_SEARCH_INDEX_NAME=${AZURE_SEARCH_INDEX_NAME:-eva-rag-index}
+      
+      # Application Configuration
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-50}
+      - SUPPORTED_LANGUAGES=${SUPPORTED_LANGUAGES:-en,fr}
+      - DEFAULT_CHUNK_SIZE=${DEFAULT_CHUNK_SIZE:-512}
+      - DEFAULT_CHUNK_OVERLAP=${DEFAULT_CHUNK_OVERLAP:-50}
+      - EMBEDDING_BATCH_SIZE=${EMBEDDING_BATCH_SIZE:-16}
+      
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - eva-network
+
+networks:
+  eva-network:
+    driver: bridge

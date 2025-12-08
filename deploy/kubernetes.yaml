@@ -1,0 +1,193 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eva-rag
+  namespace: eva-suite
+  labels:
+    app: eva-rag
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: eva-rag
+  template:
+    metadata:
+      labels:
+        app: eva-rag
+        version: v1
+    spec:
+      containers:
+      - name: eva-rag
+        image: ghcr.io/marcopolo483/eva-rag:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        # Azure Configuration from Secrets
+        - name: AZURE_STORAGE_ACCOUNT_NAME
+          valueFrom:
+            secretKeyRef:
+              name: eva-rag-secrets
+              key: storage-account-name
+        - name: AZURE_STORAGE_ACCOUNT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: eva-rag-secrets
+              key: storage-account-key
+        - name: AZURE_COSMOS_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: eva-rag-secrets
+              key: cosmos-endpoint
+        - name: AZURE_COSMOS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: eva-rag-secrets
+              key: cosmos-key
+        - name: AZURE_OPENAI_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: eva-rag-secrets
+              key: openai-endpoint
+        - name: AZURE_OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: eva-rag-secrets
+              key: openai-api-key
+        - name: AZURE_SEARCH_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: eva-rag-secrets
+              key: search-endpoint
+        - name: AZURE_SEARCH_ADMIN_KEY
+          valueFrom:
+            secretKeyRef:
+              name: eva-rag-secrets
+              key: search-admin-key
+        # App Configuration from ConfigMap
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: eva-rag-config
+              key: environment
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: eva-rag-config
+              key: log-level
+        - name: MAX_FILE_SIZE_MB
+          valueFrom:
+            configMapKeyRef:
+              name: eva-rag-config
+              key: max-file-size-mb
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      imagePullSecrets:
+      - name: ghcr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eva-rag-service
+  namespace: eva-suite
+  labels:
+    app: eva-rag
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  selector:
+    app: eva-rag
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eva-rag-config
+  namespace: eva-suite
+data:
+  environment: "production"
+  log-level: "INFO"
+  max-file-size-mb: "50"
+  supported-languages: "en,fr"
+  default-chunk-size: "512"
+  default-chunk-overlap: "50"
+  embedding-batch-size: "16"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eva-rag-ingress
+  namespace: eva-suite
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+spec:
+  tls:
+  - hosts:
+    - eva-rag.yourdomain.com
+    secretName: eva-rag-tls
+  rules:
+  - host: eva-rag.yourdomain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: eva-rag-service
+            port:
+              number: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: eva-rag-hpa
+  namespace: eva-suite
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: eva-rag
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
