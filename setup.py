@@ -1,0 +1,48 @@
+"""Setup configuration for eva-rag."""
+from setuptools import find_packages, setup
+
+setup(
+    name="eva-rag",
+    version="0.1.0",
+    description="EVA Suite RAG Engine - Document Ingestion, Chunking, Embedding, and Semantic Search",
+    author="Marco Presta",
+    author_email="marco@evasuite.com",
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
+    python_requires=">=3.11",
+    install_requires=[
+        "fastapi>=0.100.0",
+        "uvicorn[standard]>=0.23.0",
+        "python-multipart>=0.0.6",
+        "pydantic>=2.0.0",
+        "pydantic-settings>=2.0.0",
+        "pypdf2>=3.0.0",
+        "python-docx>=1.0.0",
+        "langdetect>=1.0.9",
+        "azure-storage-blob>=12.19.0",
+        "azure-cosmos>=4.5.0",
+        "azure-search-documents>=11.4.0",
+        "azure-identity>=1.15.0",
+        "openai>=1.0.0",
+        "langchain>=0.1.0",
+        "langchain-openai>=0.0.2",
+        "tiktoken>=0.5.0",
+        "sentence-transformers>=2.2.0",
+        "redis>=5.0.0",
+        "httpx>=0.25.0",
+        "tenacity>=8.2.0",
+        "python-dateutil>=2.8.0",
+    ],
+    extras_require={
+        "dev": [
+            "pytest>=7.4.0",
+            "pytest-cov>=4.1.0",
+            "pytest-asyncio>=0.21.0",
+            "pytest-mock>=3.12.0",
+            "mypy>=1.7.0",
+            "ruff>=0.1.0",
+            "black>=23.11.0",
+            "types-python-dateutil>=2.8.0",
+        ],
+    },
+)
