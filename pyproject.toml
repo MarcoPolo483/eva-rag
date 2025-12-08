@@ -68,7 +68,7 @@ addopts = [
     "--cov=src/eva_rag",
     "--cov-report=html",
     "--cov-report=term-missing",
-    "--cov-fail-under=89",
+    "--cov-fail-under=97",
     "-v"
 ]
 
