@@ -1,0 +1,53 @@
+[
+  {
+    "client": "assistme",
+    "filename": "N/A",
+    "document_type": "knowledge_article",
+    "content_preview": "## Document\n\n**Reference:** https://kmt-ogc.service.gc.ca/en/knowledgebase/article-latest?pid=KA-05215&cid=CAT-02016\n**Title:** Perform Person Evidence Verification in Cúram (Action)\n**Video Link:** [-1]\n**Video Name:** ['placeholder']\n**Walkme Flow Id:** [-1]\n**Walkme Flow Name:** ['placeholder']\n\n### Content\n\nOverview Summary This procedure provides you with the steps to follow when you are performing Person evidence verification. This includes adding, accepting and rejecting proof, correcting...",
+    "content_length": 1285508,
+    "metadata": {
+      "document_count": 104,
+      "main_element": "document",
+      "languages": [
+        "en"
+      ],
+      "total_elements": 833,
+      "detected_schema": {
+        "root_element": "documents",
+        "child_elements": {
+          "document": {
+            "count": 104,
+            "has_attributes": false,
+            "has_text": false,
+            "has_children": true
+          }
+        },
+        "repeating_elements": [
+          "document",
+          "reference",
+          "title",
+          "video_link",
+          "video_name",
+          "walkme_flow_id",
+          "walkme_flow_name",
+          "content"
+        ],
+        "common_attributes": [],
+        "structure_type": "flat"
+      },
+      "loader": "XMLLoader",
+      "root_tag": "documents",
+      "client": "assistme",
+      "use_case": "Programs and Services",
+      "document_type": "knowledge_article",
+      "jurisdiction": "Canada - Federal Programs",
+      "data_category": "Government Programs",
+      "target_users": "Service agents, Citizens, Program administrators",
+      "content_focus": "OAS, GIS, CPP, CPPD programs and services",
+      "programs": "OAS, GIS, CPP, CPPD, ALW, ALWS",
+      "system": "Cúram",
+      "source_file": "c:\\Users\\marco\\Documents\\_AI Dev\\Marco\\assistme\\knowledge_articles_r2r3_en 2.xml",
+      "format": "xml"
+    }
+  }
+]

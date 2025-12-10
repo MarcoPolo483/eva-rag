@@ -1,0 +1,35 @@
+CANADA LIFE BENEFIT BOOKLETS - INGESTION SUMMARY
+================================================================================
+
+1. Unknown
+   Plan Type: PSHCP
+   Plan Name: Public Service Health Care Plan
+   Pages: 256
+   Characters: 14,051
+   Metadata: {'author': 'Presta, Marco M [NC]', 'source_folder': 'canadalife', 'document_category': 'benefit_booklet', 'organization': 'Canada Life', 'plan_type': 'PSHCP', 'plan_name': 'Public Service Health Care Plan'}
+
+2. Unknown
+   Plan Type: General
+   Plan Name: N/A
+   Pages: 141
+   Characters: 10,652
+   Metadata: {'author': 'Presta, Marco M [NC]', 'source_folder': 'canadalife', 'document_category': 'benefit_booklet', 'organization': 'Canada Life', 'plan_type': 'General'}
+
+3. Unknown
+   Plan Type: PSDCP
+   Plan Name: Public Service Dental Care Plan
+   Pages: 40
+   Characters: 237,938
+   Metadata: {'source_folder': 'canadalife', 'document_category': 'benefit_booklet', 'organization': 'Canada Life', 'plan_type': 'PSDCP', 'plan_name': 'Public Service Dental Care Plan'}
+
+4. Unknown
+   Plan Type: PSHCP
+   Plan Name: Public Service Health Care Plan
+   Pages: 84
+   Characters: 548,347
+   Metadata: {'title': 'Public Service Health Care Plan - Member booklet ', 'author': 'The Canada Life Assurance Company', 'source_folder': 'canadalife', 'document_category': 'benefit_booklet', 'organization': 'Canada Life', 'plan_type': 'PSHCP', 'plan_name': 'Public Service Health Care Plan'}
+
+
+Total Documents: 4
+Total Pages: 521
+Total Characters: 810,988

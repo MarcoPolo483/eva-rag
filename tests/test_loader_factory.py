@@ -4,6 +4,7 @@ from io import BytesIO
 import pytest
 
 from eva_rag.loaders.factory import LoaderFactory
+from eva_rag.loaders.html_loader import HTMLLoader
 from eva_rag.loaders.pdf_loader import PDFLoader
 from eva_rag.loaders.text_loader import TextLoader
 
@@ -24,6 +25,18 @@ def test_factory_returns_text_loader_for_md() -> None:
     """Test factory returns text loader for .md extension."""
     loader = LoaderFactory.get_loader("readme.md")
     assert isinstance(loader, TextLoader)
+
+
+def test_factory_returns_html_loader_for_html() -> None:
+    """Test factory returns HTML loader for .html extension."""
+    loader = LoaderFactory.get_loader("page.html")
+    assert isinstance(loader, HTMLLoader)
+
+
+def test_factory_returns_html_loader_for_htm() -> None:
+    """Test factory returns HTML loader for .htm extension."""
+    loader = LoaderFactory.get_loader("page.htm")
+    assert isinstance(loader, HTMLLoader)
 
 
 def test_factory_case_insensitive() -> None:
@@ -62,3 +75,5 @@ def test_factory_supported_extensions() -> None:
     assert ".docx" in extensions
     assert ".txt" in extensions
     assert ".md" in extensions
+    assert ".html" in extensions
+    assert ".htm" in extensions

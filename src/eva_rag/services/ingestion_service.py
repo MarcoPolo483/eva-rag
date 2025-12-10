@@ -1,17 +1,22 @@
 """Document ingestion service orchestrating the full pipeline."""
+import logging
 import time
 import uuid
 from io import BytesIO
 from typing import BinaryIO
 
 from eva_rag.loaders.factory import LoaderFactory
+from eva_rag.models.chunk import DocumentChunk
 from eva_rag.models.document import DocumentMetadata, DocumentStatus
 from eva_rag.services.chunking_service import ChunkingService
 from eva_rag.services.embedding_service import EmbeddingService
 from eva_rag.services.language_service import LanguageDetectionService
 from eva_rag.services.metadata_service import MetadataService
+from eva_rag.services.search_service import SearchService
 from eva_rag.services.storage_service import StorageService
 from eva_rag.utils.datetime_utils import now_utc
+
+logger = logging.getLogger(__name__)
 
 
 class IngestionService:
@@ -28,6 +33,14 @@ class IngestionService:
             self.embedding_service = EmbeddingService()
         except Exception:
             self.embedding_service = None  # Will skip embedding if not available
+        
+        # Search service requires Azure AI Search configuration
+        try:
+            self.search_service = SearchService()
+            self.search_service.create_index_if_not_exists()
+        except Exception as e:
+            logger.warning(f"Search service unavailable, indexing will be skipped: {e}")
+            self.search_service = None
     
     async def ingest_document(
         self,
@@ -135,14 +148,56 @@ class IngestionService:
         # Step 7: Store in Cosmos DB
         self.metadata_service.create_document(metadata)
         
-        # TODO: Step 8: Index chunks in Azure AI Search (to be implemented)
-        # This will update status to DocumentStatus.INDEXED
+        # Step 8: Index chunks in Azure AI Search
+        if self.search_service and chunk_count > 0 and embeddings:
+            try:
+                # Create DocumentChunk objects for indexing
+                document_chunks = []
+                for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+                    doc_chunk = DocumentChunk(
+                        chunk_id=f"{document_id}_{i}",  # Use underscore instead of colon (Azure AI Search key restriction)
+                        document_id=document_id,
+                        space_id=space_id,
+                        tenant_id=tenant_id,
+                        user_id=user_id,
+                        text=chunk.text,
+                        chunk_index=i,
+                        token_count=len(chunk.text.split()),  # Approximate token count
+                        filename=filename,
+                        page_number=chunk.page_number if hasattr(chunk, 'page_number') else None,
+                        embedding=embedding,
+                        language=language,
+                        created_at=now,
+                        metadata={
+                            "document_name": filename,
+                            "document_type": additional_metadata.get("document_type", "other") if additional_metadata else "other",
+                        },
+                    )
+                    document_chunks.append(doc_chunk)
+                
+                # Index in Azure AI Search
+                indexed_count = self.search_service.index_chunks(document_chunks)
+                
+                # Update document status to INDEXED
+                if indexed_count == chunk_count:
+                    metadata.status = DocumentStatus.INDEXED
+                    metadata.indexed_at = now_utc()
+                    self.metadata_service.update_document(metadata)
+                    logger.info(f"✅ Indexed {indexed_count} chunks for document {document_id}")
+                else:
+                    logger.warning(
+                        f"⚠️  Partial indexing: {indexed_count}/{chunk_count} chunks indexed"
+                    )
+            except Exception as e:
+                logger.error(f"Failed to index chunks for document {document_id}: {e}")
+                # Continue - document still usable even if indexing failed
         
         # Log processing time
         processing_time = int((time.time() - start_time) * 1000)
         print(
             f"✅ Ingested document {document_id} ({filename}) in {processing_time}ms: "
-            f"{chunk_count} chunks, {len(embeddings)} embeddings"
+            f"{chunk_count} chunks, {len(embeddings)} embeddings, "
+            f"status={metadata.status}"
         )
         
         return metadata

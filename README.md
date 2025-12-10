@@ -12,7 +12,10 @@ EVA-RAG provides document ingestion, chunking, vector embedding, hybrid search, 
 
 ### Features
 
-- **Document Ingestion**: PDF/DOCX/TXT upload and text extraction
+- **Document Ingestion**: PDF, DOCX, TXT, HTML, XML, CSV, Excel, PowerPoint, MS Project
+  - **Microsoft 365 Suite**: Full support for Excel (.xlsx, .xls), PowerPoint (.pptx), Project (.mpp XML)
+  - **Kaggle Datasets**: Optimized CSV loader for large employment datasets (120MB+)
+  - **XML & Folder Processing**: Automatic schema detection and recursive folder ingestion
 - **Text Chunking**: Semantic chunking with LangChain (500 tokens, 50 overlap)
 - **Vector Embedding**: Azure OpenAI text-embedding-3-small (1536 dims)
 - **Hybrid Search**: Vector (cosine) + Keyword (BM25) with RRF fusion
@@ -62,13 +65,23 @@ Visit http://localhost:8000/api/v1/docs for Swagger UI
 eva-rag/
 ├── src/eva_rag/           # Source code
 │   ├── api/               # FastAPI endpoints
-│   ├── loaders/           # Document loaders (PDF, DOCX, TXT)
+│   ├── loaders/           # Document loaders (13 formats supported)
+│   │   ├── pdf_loader.py      # PDF documents
+│   │   ├── docx_loader.py     # Microsoft Word
+│   │   ├── csv_loader.py      # CSV with delimiter detection
+│   │   ├── excel_loader.py    # Excel (.xlsx, .xls)
+│   │   ├── pptx_loader.py     # PowerPoint presentations
+│   │   ├── mpp_loader.py      # MS Project (XML format)
+│   │   ├── xml_loader.py      # XML with schema detection
+│   │   ├── folder_loader.py   # Recursive folder processing
+│   │   └── ...                # HTML, TXT, MD loaders
 │   ├── services/          # Business logic (chunking, embedding, search)
 │   ├── models/            # Pydantic models
 │   └── utils/             # Utilities
 ├── tests/                 # Tests (95%+ coverage required)
 ├── docs/                  # Documentation
-│   └── SPECIFICATION.md   # Complete specification (834 lines)
+│   ├── SPECIFICATION.md       # Complete specification (834 lines)
+│   └── KAGGLE-INTEGRATION.md  # Kaggle employment datasets guide
 └── pyproject.toml         # Poetry dependencies
 ```
 
@@ -166,7 +179,12 @@ curl -X POST "http://localhost:8000/api/v1/rag/search" \
 
 ## Implementation Phases
 
-- ✅ **Phase 1** (Weeks 1-2): Document Ingestion - IN PROGRESS
+- ✅ **Phase 1** (Weeks 1-2): Document Ingestion - **COMPLETE**
+  - ✅ 13 file formats supported: PDF, DOCX, TXT, MD, HTML, XML, CSV, Excel, PowerPoint, MS Project
+  - ✅ CSV loader for Kaggle employment datasets (120MB+ files)
+  - ✅ XML loader with automatic schema detection
+  - ✅ Folder loader for recursive directory processing
+  - ✅ Microsoft 365 suite support (Excel, PowerPoint, Project)
 - ⏳ **Phase 2** (Weeks 3-4): Text Chunking & Embedding
 - ⏳ **Phase 3** (Weeks 5-6): Vector Indexing & Search
 - ⏳ **Phase 4** (Weeks 7-8): Reranking & Citation Extraction

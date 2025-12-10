@@ -1,0 +1,189 @@
+[
+  {
+    "filename": "N/A",
+    "dataset_name": "Employment by Industry (14-10-0355)",
+    "content_preview": "# CSV Data\n\n**Total Rows:** 3,000\n\n**Columns:** 7\n\n\n## Columns\n\n1. `REF_DATE`\n2. `GEO`\n3. `NAICS`\n4. `Data_Type`\n5. `UOM`\n6. `VALUE`\n7. `STATUS`\n\n## Data Preview\n\n| REF_DATE | GEO | NAICS | Data_Type | UOM | VALUE | STATUS |\n| --- | --- | --- | --- | --- | --- | --- |\n| 2020-01 | Canada | Total employed, all industries | Seasonally adjusted | Persons x 1,000 | 1000.0 |  |\n| 2020-01 | Canada | Goods-producing sector | Seasonally adjusted | Persons x 1,000 | 100.0 |  |\n| 2020-01 | Canada | Manufac...",
+    "content_length": 5433,
+    "metadata": {
+      "loader": "CSVLoader",
+      "encoding": "utf-8",
+      "delimiter": ",",
+      "column_count": 7,
+      "row_count": 3000,
+      "sampled_rows": 3000,
+      "columns": [
+        "REF_DATE",
+        "GEO",
+        "NAICS",
+        "Data_Type",
+        "UOM",
+        "VALUE",
+        "STATUS"
+      ],
+      "statistics": {
+        "REF_DATE": {
+          "type": "categorical",
+          "unique_count": 60,
+          "sample_values": [
+            "2022-11",
+            "2020-10",
+            "2024-06",
+            "2023-02",
+            "2020-05"
+          ]
+        },
+        "GEO": {
+          "type": "categorical",
+          "unique_count": 5,
+          "sample_values": [
+            "British Columbia",
+            "Canada",
+            "Alberta",
+            "Quebec",
+            "Ontario"
+          ]
+        },
+        "NAICS": {
+          "type": "categorical",
+          "unique_count": 10,
+          "sample_values": [
+            "Total employed, all industries",
+            "Educational services",
+            "Health care and social assistance",
+            "Finance and insurance",
+            "Goods-producing sector"
+          ]
+        },
+        "Data_Type": {
+          "type": "categorical",
+          "unique_count": 1,
+          "sample_values": [
+            "Seasonally adjusted"
+          ]
+        },
+        "UOM": {
+          "type": "categorical",
+          "unique_count": 1,
+          "sample_values": [
+            "Persons x 1,000"
+          ]
+        },
+        "VALUE": {
+          "type": "numeric",
+          "min": 100.0,
+          "max": 1080.0,
+          "mean": 197.6
+        },
+        "STATUS": {
+          "type": "numeric",
+          "min": null,
+          "max": null,
+          "mean": null
+        }
+      },
+      "data_source": "Statistics Canada",
+      "data_category": "Employment & Labour Market",
+      "use_case": "Employment Analytics",
+      "dataset_name": "Employment by Industry (14-10-0355)",
+      "metrics": "Employment by NAICS industry classification"
+    }
+  },
+  {
+    "filename": "N/A",
+    "dataset_name": "Labour Force Characteristics by Province (14-10-0287)",
+    "content_preview": "# CSV Data\n\n**Total Rows:** 2,700\n\n**Columns:** 8\n\n\n## Columns\n\n1. `REF_DATE`\n2. `GEO`\n3. `Sex`\n4. `Age_group`\n5. `Labour_force_characteristics`\n6. `UOM`\n7. `VALUE`\n8. `STATUS`\n\n## Data Preview\n\n| REF_DATE | GEO | Sex | Age_group | Labour_force_characteristics | UOM | VALUE | STATUS |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| 2020-01 | Canada | Both sexes | 15 years and over | Population | Persons x 1,000 | 1000.0 |  |\n| 2020-01 | Canada | Both sexes | 15 years and over | Labour force ...",
+    "content_length": 5420,
+    "metadata": {
+      "loader": "CSVLoader",
+      "encoding": "utf-8",
+      "delimiter": ",",
+      "column_count": 8,
+      "row_count": 2700,
+      "sampled_rows": 2700,
+      "columns": [
+        "REF_DATE",
+        "GEO",
+        "Sex",
+        "Age_group",
+        "Labour_force_characteristics",
+        "UOM",
+        "VALUE",
+        "STATUS"
+      ],
+      "statistics": {
+        "REF_DATE": {
+          "type": "categorical",
+          "unique_count": 60,
+          "sample_values": [
+            "2022-11",
+            "2020-10",
+            "2024-06",
+            "2023-02",
+            "2020-05"
+          ]
+        },
+        "GEO": {
+          "type": "categorical",
+          "unique_count": 5,
+          "sample_values": [
+            "British Columbia",
+            "Canada",
+            "Alberta",
+            "Quebec",
+            "Ontario"
+          ]
+        },
+        "Sex": {
+          "type": "categorical",
+          "unique_count": 1,
+          "sample_values": [
+            "Both sexes"
+          ]
+        },
+        "Age_group": {
+          "type": "categorical",
+          "unique_count": 1,
+          "sample_values": [
+            "15 years and over"
+          ]
+        },
+        "Labour_force_characteristics": {
+          "type": "categorical",
+          "unique_count": 9,
+          "sample_values": [
+            "Population",
+            "Labour force",
+            "Participation rate",
+            "Employment rate",
+            "Unemployment rate"
+          ]
+        },
+        "UOM": {
+          "type": "categorical",
+          "unique_count": 2,
+          "sample_values": [
+            "Persons x 1,000",
+            "Percentage"
+          ]
+        },
+        "VALUE": {
+          "type": "numeric",
+          "min": 6.5,
+          "max": 1000.0,
+          "mean": 674.7777777777778
+        },
+        "STATUS": {
+          "type": "numeric",
+          "min": null,
+          "max": null,
+          "mean": null
+        }
+      },
+      "data_source": "Statistics Canada",
+      "data_category": "Employment & Labour Market",
+      "use_case": "Employment Analytics",
+      "dataset_name": "Labour Force Characteristics by Province (14-10-0287)",
+      "metrics": "Unemployment, employment rates, labour force participation"
+    }
+  }
+]

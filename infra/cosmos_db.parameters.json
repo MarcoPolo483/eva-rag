@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "accountName": {
+      "value": "eva-rag-cosmos-dev"
+    },
+    "location": {
+      "value": "eastus"
+    },
+    "environment": {
+      "value": "dev"
+    },
+    "databaseName": {
+      "value": "eva-rag"
+    },
+    "enableFreeTier": {
+      "value": true
+    },
+    "throughputPolicy": {
+      "value": "autoscale"
+    },
+    "defaultMaxThroughput": {
+      "value": 4000
+    }
+  }
+}

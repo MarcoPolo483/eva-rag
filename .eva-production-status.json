@@ -1,0 +1,50 @@
+{
+  "repo": "eva-rag",
+  "timestamp": "2025-12-09T00:41:03-05:00",
+  "score": 75,
+  "readinessLevel": [
+    "🟡 Near Production",
+    "🟠 Active Development",
+    "🔵 Early Stage"
+  ],
+  "documentation": {
+    "details": [
+      "✅ README exists (219 lines)",
+      "✅ docs/ folder with 46 files"
+    ],
+    "score": 40
+  },
+  "implementation": {
+    "details": [
+      "✅ src/ - 47 files, 7713 lines",
+      "✅ scripts/ - 4 files, 1144 lines",
+      "✅ Python project detected"
+    ],
+    "score": 25,
+    "sourceStats": {
+      "src": {
+        "FileCount": 47,
+        "TotalLines": 7713,
+        "Extensions": {
+          ".py": 47
+        }
+      },
+      "scripts": {
+        "FileCount": 4,
+        "TotalLines": 1144,
+        "Extensions": {
+          ".py": 4
+        }
+      }
+    }
+  },
+  "quality": {
+    "details": [
+      "⚠️  No test files found",
+      "✅ GitHub Actions: 1 workflows",
+      "✅ Quality configs: 1 found"
+    ],
+    "score": 10
+  },
+  "assessmentVersion": "1.0.0"
+}

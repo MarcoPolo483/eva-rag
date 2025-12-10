@@ -15,6 +15,17 @@ When working in this repository, always treat **eva-orchestrator** as the contro
    - `scripts/`
    - `src/` (or other app folders)
 
+## 🤖 Agentic Framework (MANDATORY CONTEXT)
+
+**YOU ARE AN L2 WORKFLOW AGENT** - Read and internalize:
+- `../eva-orchestrator/docs/standards/AGENTIC-FRAMEWORK-OFFICIAL.md` (Maturity Model, P01-P15)
+- `../eva-orchestrator/docs/standards/DUA-FORMAT-SPECIFICATION.md` (Archive format)
+- `../eva-orchestrator/docs/agents/AGENT-SERVICE-CATALOG.md` (Agent directory)
+
+**Your Role**: P04-LIB (Librarian) + P06-RAG (RAG Engineer) capabilities  
+**Maturity Level**: L2 (Workflow Agent) - Multi-step planning, human confirmation, full audit trail  
+**Production Rules**: L0-L2 allowed, L3 sandbox only
+
 ## ✅ Execution Evidence Rule
 
 For every script, command, or workflow you generate in this repo, you MUST:

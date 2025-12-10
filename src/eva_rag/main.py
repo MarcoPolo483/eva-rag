@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from eva_rag.config import settings
-from eva_rag.api import ingest
+from eva_rag.api import ingest, spaces, documents, chunks, ai_interactions, audit, search
 
 
 @asynccontextmanager
@@ -85,3 +85,9 @@ async def health_check() -> dict[str, str]:
 
 # Register routers
 app.include_router(ingest.router, prefix=settings.api_prefix)
+app.include_router(search.router, prefix=settings.api_prefix)
+app.include_router(spaces.router, prefix=settings.api_prefix)
+app.include_router(documents.router, prefix=settings.api_prefix)
+app.include_router(chunks.router, prefix=settings.api_prefix)
+app.include_router(ai_interactions.router, prefix=settings.api_prefix)
+app.include_router(audit.router, prefix=settings.api_prefix)

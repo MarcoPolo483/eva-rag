@@ -18,23 +18,24 @@
       "LangChain (text splitting, retrieval)",
       "Sentence Transformers (reranking)"
     ],
-    "lastUpdated": "2025-12-07T00:00:00Z"
+    "lastUpdated": "2025-12-08T23:45:00Z"
   },
   "context": {
-    "summary": "Phase 1 COMPLETE (2025-12-07T14:30:00+00:00 | December 7, 2025 at 2:30 PM UTC): Document ingestion pipeline operational with 31 files created, 37 tests written, POST /api/v1/rag/ingest endpoint ready. All Phase 1 tasks finished: FastAPI setup, PDF/DOCX/TXT loaders, language detection (EN-CA/FR-CA), Azure Blob Storage, Cosmos DB metadata, comprehensive tests. Next: Phase 2 (Weeks 3-4) - Text chunking with LangChain, Azure OpenAI embeddings, Redis caching. See docs/PHASE-1-COMPLETE.md for full inventory.",
+    "summary": "Azure AI Search Integration COMPLETE (2025-12-09T11:43:00+00:00 | December 9, 2025 at 6:43 AM EST): ✅ Critical blocker resolved - vector search indexing operational. Index 'eva-rag-chunks' created with HNSW algorithm (m=4, ef_construction=400). Hybrid search (vector + BM25) working with 433ms avg latency (target: <500ms). Azure OpenAI text-embedding-3-small deployed in ao-sandbox. Phase 1 complete + Phase 2 indexing operational. Next: Re-index 2,167 existing documents, implement cross-encoder reranking, address P0 issues (table-aware chunking, synthetic data flags). Phase 2 jurisprudence spec still awaiting approval (800 cases, $0.51 cost).",
     "keyFiles": [
+      "docs/AZURE-AI-SEARCH-IMPLEMENTATION.md (Complete implementation docs - NEW)",
+      "docs/RAG-CAPABILITIES-VS-DATA-PIPELINE.md (Gap analysis - 545 lines)",
+      "TEST-RESULTS-AZURE-SEARCH.md (Test results Dec 9, 2025 - NEW)",
+      "test_search_integration.py (Comprehensive test suite - 273 lines - NEW)",
+      "src/eva_rag/services/search_service.py (Azure AI Search integration - 427 lines - NEW)",
+      "src/eva_rag/api/search.py (POST /api/v1/rag/search endpoint - 146 lines - NEW)",
+      "src/eva_rag/models/search.py (SearchRequest/Response models - NEW)",
       "docs/SPECIFICATION.md (Complete specification - 834 lines)",
-      "docs/PHASE-1-COMPLETE.md (Phase 1 completion report)",
-      "src/eva_rag/api/ingest.py (POST /api/v1/rag/ingest - COMPLETE)",
-      "src/eva_rag/loaders/ (PDF/DOCX/TXT loaders - COMPLETE)",
-      "src/eva_rag/services/ingestion_service.py (Pipeline orchestration - COMPLETE)",
-      "src/eva_rag/services/language_service.py (EN-CA/FR-CA detection - COMPLETE)",
-      "src/eva_rag/services/storage_service.py (Azure Blob - COMPLETE)",
-      "src/eva_rag/services/metadata_service.py (Cosmos DB - COMPLETE)",
-      "tests/ (37 tests covering Phase 1 - COMPLETE)"
+      "src/eva_rag/services/ingestion_service.py (TODO line 157 COMPLETED - auto-indexing)",
+      "ingest_legal_documents.py (Multi-client legal ingestion - READY FOR RE-INDEX)"
     ],
-    "currentPhase": "Phase 1 COMPLETE ✅ | Ready for Phase 2: Text Chunking & Embedding (Weeks 3-4)",
-    "openIssues": 0,
+    "currentPhase": "Phase 2 INDEXING OPERATIONAL ✅ | Next: Re-index 2,167 docs → Test queries → Implement reranking → Phase 2 jurisprudence approval",
+    "openIssues": 3,
     "blockers": []
   },
   "quality": {
@@ -46,6 +47,17 @@
   },
   "memory": {
     "lessons": [
+      "✅ Azure AI Search Integration (Dec 9, 2025): HNSW algorithm (m=4, ef_construction=400) achieves 433ms avg search latency - within 500ms target",
+      "✅ Hybrid search (vector + BM25 with RRF fusion k=60) operational - combines semantic and keyword matching",
+      "✅ Azure OpenAI text-embedding-3-small deployment in ao-sandbox resource working (1536 dims)",
+      "⚠️ First query takes ~1000ms (includes embedding generation), subsequent queries ~150-200ms",
+      "✅ Empty index handling: Graceful degradation with 0 results, no errors",
+      "✅ Ingestion pipeline auto-indexes chunks in Azure AI Search after embedding generation (TODO line 157 completed)",
+      "Phase 2: Jurisprudence requires text-embedding-3-large (3072 dims) not text-embedding-3-small (1536 dims) for legal precision",
+      "Phase 2: Hybrid semantic + structural chunking preserves legal reasoning flow (Facts → Issue → Analysis → Ruling)",
+      "Phase 2: 4 tribunals discovered (SCC, FC, FCA, SST) each need 100 sample cases in EN + FR = 800 total cases",
+      "Phase 2: Complete jurispipeline package exists in eva-orchestrator with 4-stage pipeline (Discover → Fetch → Normalize → Publish)",
+      "Phase 2: Date format rule - ALWAYS use 2025 not 2024 (EVA Suite built Nov 2-Dec 8, 2025 = 36 days)",
       "Phase 1: Document loaders with PyPDF2/python-docx work well, preserve page numbers for citations",
       "Phase 1: Language detection with langdetect is fast and accurate for EN/FR (default to EN for edge cases)",
       "Phase 1: Tenant isolation via {tenant_id}/{space_id}/{document_id} path prevents data leaks",
@@ -68,11 +80,13 @@
       "pytest + coverage.py (testing, 95% coverage)"
     ],
     "patterns": [
+      "✅ Phase 2 Indexing Complete: Upload → Extract → Detect Language → Chunk → Embed → Index (Azure AI Search) → Store (status=INDEXED)",
       "Phase 1 Complete: Upload → Extract (PyPDF2/python-docx) → Detect Language (langdetect) → Store (Azure Blob + Cosmos DB)",
       "Document Ingestion: Upload → Extract → Detect Language → Chunk → Embed → Index",
       "Chunking: RecursiveCharacterTextSplitter (500 tokens, 50 overlap, sentence boundaries)",
       "Embedding: Batch 100 chunks, cache by hash (Redis 7-day TTL)",
       "Hybrid Search: Vector (cosine similarity) + Keyword (BM25) → RRF fusion (k=60)",
+      "Search Flow: Query → Generate Embedding (100ms) → Hybrid Search (150-250ms) → Return Results (< 500ms total)",
       "Reranking: Cross-encoder top-20 → filter < 0.5 → return top-K",
       "Citation: Extract document_name, page_number, content snippet for each result",
       "Tenant Isolation: Filter all operations by space_id + tenant_id"
@@ -94,8 +108,8 @@
     "createdBy": "EVA-Orchestrator Specification Generation (eva-rag RAG engine)",
     "createdAt": "2025-12-07T00:00:00Z",
     "templateVersion": "1.0.0",
-    "lastModifiedBy": "GitHub Copilot (Phase 1 Complete)",
-    "lastModifiedAt": "2025-12-07T14:30:00+00:00",
-    "lastModifiedAtDisplay": "December 7, 2025 at 2:30 PM UTC"
+    "lastModifiedBy": "GitHub Copilot (Azure AI Search Integration Complete)",
+    "lastModifiedAt": "2025-12-09T11:43:00+00:00",
+    "lastModifiedAtDisplay": "December 9, 2025 at 6:43 AM EST"
   }
 }

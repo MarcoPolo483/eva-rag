@@ -1,0 +1,373 @@
+"""Tests to achieve 100% coverage - comprehensive integration paths."""
+import pytest
+from io import BytesIO
+from uuid import uuid4
+from unittest.mock import Mock, AsyncMock, patch, MagicMock
+from datetime import datetime
+
+from eva_rag.models.document import DocumentMetadata, DocumentStatus
+
+
+# ===== Test ingestion_service.py full workflow (lines 85-148) =====
+@pytest.mark.asyncio
+async def test_ingestion_service_full_workflow():
+    """Test complete ingestion workflow with all services."""
+    from eva_rag.services.ingestion_service import IngestionService
+    from eva_rag.loaders.base import ExtractedDocument
+    
+    with patch('eva_rag.services.ingestion_service.StorageService') as MockStorage, \
+         patch('eva_rag.services.ingestion_service.MetadataService') as MockMetadata, \
+         patch('eva_rag.services.ingestion_service.ChunkingService') as MockChunking, \
+         patch('eva_rag.services.ingestion_service.EmbeddingService') as MockEmbedding, \
+         patch('eva_rag.services.ingestion_service.LanguageDetectionService') as MockLanguage, \
+         patch('eva_rag.services.ingestion_service.DocumentLoaderFactory') as MockFactory:
+        
+        # Setup mocks
+        mock_storage = Mock()
+        mock_storage.upload_document = Mock(return_value="https://blob.url/test.txt")
+        MockStorage.return_value = mock_storage
+        
+        mock_metadata = Mock()
+        mock_metadata.create_document = Mock()
+        MockMetadata.return_value = mock_metadata
+        
+        mock_chunking = Mock()
+        mock_chunk = Mock()
+        mock_chunk.text = "chunk text"
+        mock_chunking.chunk_text = Mock(return_value=[mock_chunk, mock_chunk])
+        MockChunking.return_value = mock_chunking
+        
+        mock_embedding = Mock()
+        mock_embedding.generate_embeddings_batch = Mock(return_value=[[0.1, 0.2], [0.3, 0.4]])
+        MockEmbedding.return_value = mock_embedding
+        
+        mock_language = Mock()
+        mock_language.detect_language = Mock(return_value="en")
+        MockLanguage.return_value = mock_language
+        
+        mock_loader = Mock()
+        mock_loader.load = Mock(return_value=ExtractedDocument(
+            text="Test document content",
+            page_count=1,
+            metadata={"author": "Test Author"}
+        ))
+        MockFactory.get_loader = Mock(return_value=mock_loader)
+        
+        service = IngestionService()
+        
+        file = BytesIO(b"Test content")
+        
+        result = await service.ingest_document(
+            file=file,
+            filename="test.txt",
+            file_size=100,
+            content_type="text/plain",
+            tenant_id=uuid4(),
+            space_id=uuid4(),
+            user_id=uuid4(),
+            additional_metadata={"custom": "data"}
+        )
+        
+        # Verify full workflow executed
+        assert result.status == DocumentStatus.INDEXING
+        assert result.chunk_count == 2
+        assert result.language == "en"
+        assert result.metadata["author"] == "Test Author"
+        assert result.metadata["custom"] == "data"
+        mock_storage.upload_document.assert_called_once()
+        mock_metadata.create_document.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_ingestion_service_no_embedding_service():
+    """Test ingestion when embedding service is None."""
+    from eva_rag.services.ingestion_service import IngestionService
+    from eva_rag.loaders.base import ExtractedDocument
+    
+    with patch('eva_rag.services.ingestion_service.StorageService') as MockStorage, \
+         patch('eva_rag.services.ingestion_service.MetadataService') as MockMetadata, \
+         patch('eva_rag.services.ingestion_service.ChunkingService') as MockChunking, \
+         patch('eva_rag.services.ingestion_service.LanguageDetectionService') as MockLanguage, \
+         patch('eva_rag.services.ingestion_service.DocumentLoaderFactory') as MockFactory:
+        
+        mock_storage = Mock()
+        mock_storage.upload_document = Mock(return_value="https://blob.url/test.txt")
+        MockStorage.return_value = mock_storage
+        
+        mock_metadata = Mock()
+        mock_metadata.create_document = Mock()
+        MockMetadata.return_value = mock_metadata
+        
+        mock_chunking = Mock()
+        mock_chunk = Mock()
+        mock_chunk.text = "chunk"
+        mock_chunking.chunk_text = Mock(return_value=[mock_chunk])
+        MockChunking.return_value = mock_chunking
+        
+        mock_language = Mock()
+        mock_language.detect_language = Mock(return_value="en")
+        MockLanguage.return_value = mock_language
+        
+        mock_loader = Mock()
+        mock_loader.load = Mock(return_value=ExtractedDocument(
+            text="Test",
+            page_count=1,
+            metadata={}
+        ))
+        MockFactory.get_loader = Mock(return_value=mock_loader)
+        
+        service = IngestionService()
+        service.embedding_service = None  # Explicitly set to None
+        
+        file = BytesIO(b"Test")
+        
+        result = await service.ingest_document(
+            file=file,
+            filename="test.txt",
+            file_size=4,
+            content_type="text/plain",
+            tenant_id=uuid4(),
+            space_id=uuid4(),
+            user_id=uuid4(),
+            additional_metadata=None
+        )
+        
+        assert result.status == DocumentStatus.INDEXING
+        assert result.chunk_count == 1
+
+
+@pytest.mark.asyncio
+async def test_ingestion_service_empty_chunks():
+    """Test ingestion when chunking returns empty list."""
+    from eva_rag.services.ingestion_service import IngestionService
+    from eva_rag.loaders.base import ExtractedDocument
+    
+    with patch('eva_rag.services.ingestion_service.StorageService') as MockStorage, \
+         patch('eva_rag.services.ingestion_service.MetadataService') as MockMetadata, \
+         patch('eva_rag.services.ingestion_service.ChunkingService') as MockChunking, \
+         patch('eva_rag.services.ingestion_service.LanguageDetectionService') as MockLanguage, \
+         patch('eva_rag.services.ingestion_service.DocumentLoaderFactory') as MockFactory:
+        
+        mock_storage = Mock()
+        mock_storage.upload_document = Mock(return_value="https://blob.url/test.txt")
+        MockStorage.return_value = mock_storage
+        
+        mock_metadata = Mock()
+        mock_metadata.create_document = Mock()
+        MockMetadata.return_value = mock_metadata
+        
+        mock_chunking = Mock()
+        mock_chunking.chunk_text = Mock(return_value=[])  # Empty chunks
+        MockChunking.return_value = mock_chunking
+        
+        mock_language = Mock()
+        mock_language.detect_language = Mock(return_value="en")
+        MockLanguage.return_value = mock_language
+        
+        mock_loader = Mock()
+        mock_loader.load = Mock(return_value=ExtractedDocument(
+            text="Short",
+            page_count=1,
+            metadata=None
+        ))
+        MockFactory.get_loader = Mock(return_value=mock_loader)
+        
+        service = IngestionService()
+        service.embedding_service = None
+        
+        file = BytesIO(b"Short")
+        
+        result = await service.ingest_document(
+            file=file,
+            filename="test.txt",
+            file_size=5,
+            content_type="text/plain",
+            tenant_id=uuid4(),
+            space_id=uuid4(),
+            user_id=uuid4(),
+            additional_metadata={}
+        )
+        
+        assert result.chunk_count == 0
+
+
+# ===== Test pdf_loader.py error paths (lines 34, 42, 51-54) =====
+def test_pdf_loader_metadata_extraction():
+    """Test PDF loader extracts metadata from PDF."""
+    from eva_rag.loaders.pdf_loader import PDFLoader
+    from pypdf import PdfReader, PdfWriter
+    from pypdf.generic import DictionaryObject
+    
+    loader = PDFLoader()
+    
+    # Create a PDF with metadata
+    writer = PdfWriter()
+    writer.add_blank_page(width=200, height=200)
+    
+    # Add metadata
+    writer.add_metadata({
+        '/Title': 'Test Document',
+        '/Author': 'Test Author'
+    })
+    
+    pdf_buffer = BytesIO()
+    writer.write(pdf_buffer)
+    pdf_buffer.seek(0)
+    
+    result = loader.load(pdf_buffer, "test.pdf")
+    
+    assert result.text is not None
+    assert result.page_count == 1
+    assert "title" in result.metadata
+    assert result.metadata["title"] == "Test Document"
+    assert "author" in result.metadata
+    assert result.metadata["author"] == "Test Author"
+
+
+def test_pdf_loader_page_with_no_text():
+    """Test PDF loader handles pages with no extractable text."""
+    from eva_rag.loaders.pdf_loader import PDFLoader
+    from pypdf import PdfWriter
+    
+    loader = PDFLoader()
+    
+    # Create a PDF with blank page (no text)
+    writer = PdfWriter()
+    writer.add_blank_page(width=200, height=200)
+    
+    pdf_buffer = BytesIO()
+    writer.write(pdf_buffer)
+    pdf_buffer.seek(0)
+    
+    result = loader.load(pdf_buffer, "blank.pdf")
+    
+    # Should still process, even with no text
+    assert result.text is not None
+    assert "[PAGE 1]" in result.text
+    assert result.page_count == 1
+
+
+# ===== Test language_service.py edge cases (lines 48-50) =====
+def test_language_service_detection_fallback():
+    """Test language service detection with undetectable content."""
+    from eva_rag.services.language_service import LanguageDetectionService
+    
+    service = LanguageDetectionService()
+    
+    # Test with extremely short content
+    result = service.detect_language("x")
+    assert result in ["en", "fr", "other"]
+    
+    # Test with numbers only
+    result = service.detect_language("1234567890")
+    assert result in ["en", "fr", "other"]
+    
+    # Test with punctuation only
+    result = service.detect_language("!!!")
+    assert result in ["en", "fr", "other"]
+
+
+# ===== Test storage_service.py initialization (lines 22-23) =====
+def test_storage_service_credential_fallback():
+    """Test storage service uses DefaultAzureCredential when connection string is None."""
+    from eva_rag.services.storage_service import StorageService
+    from eva_rag.config import settings
+    
+    original_conn = settings.azure_storage_connection_string
+    
+    try:
+        settings.azure_storage_connection_string = None
+        
+        with patch('eva_rag.services.storage_service.DefaultAzureCredential') as MockCred, \
+             patch('eva_rag.services.storage_service.BlobServiceClient') as MockClient:
+            
+            mock_credential = Mock()
+            MockCred.return_value = mock_credential
+            
+            service = StorageService()
+            
+            # Verify DefaultAzureCredential was used
+            MockCred.assert_called_once()
+            MockClient.assert_called_once()
+            assert service is not None
+    finally:
+        settings.azure_storage_connection_string = original_conn
+
+
+# ===== Test metadata_service.py initialization (lines 52-53) =====
+def test_metadata_service_ensure_database_exception():
+    """Test metadata service handles database creation exceptions."""
+    from eva_rag.services.metadata_service import MetadataService
+    from azure.core.exceptions import ServiceRequestError
+    
+    with patch('eva_rag.services.metadata_service.CosmosClient') as MockClient:
+        mock_client = Mock()
+        mock_database = Mock()
+        
+        # Make database creation raise exception
+        mock_client.create_database_if_not_exists.side_effect = ServiceRequestError("Permission denied")
+        mock_database.create_container_if_not_exists.side_effect = ServiceRequestError("Permission denied")
+        
+        MockClient.return_value = mock_client
+        
+        # Should not crash, exception is caught
+        service = MetadataService()
+        assert service is not None
+
+
+# ===== Test api/ingest.py edge cases (lines 79, 102-104) =====
+def test_api_ingest_file_seek_error():
+    """Test API handles files that can't be seeked."""
+    from fastapi.testclient import TestClient
+    from eva_rag.main import app
+    
+    client = TestClient(app)
+    
+    with patch('eva_rag.api.ingest.IngestionService') as MockService:
+        mock_service = Mock()
+        
+        # Simulate successful ingestion
+        mock_metadata = DocumentMetadata(
+            id=uuid4(),
+            tenant_id=uuid4(),
+            space_id=uuid4(),
+            user_id=uuid4(),
+            filename="test.txt",
+            file_size_bytes=100,
+            content_hash="abc123",
+            content_type="text/plain",
+            text_length=100,
+            page_count=1,
+            language="en",
+            status=DocumentStatus.INDEXED,
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
+            blob_url="https://blob.url/test.txt"
+        )
+        
+        mock_service.ingest_document = AsyncMock(return_value=mock_metadata)
+        MockService.return_value = mock_service
+        
+        response = client.post(
+            "/api/v1/rag/ingest",
+            data={
+                "space_id": str(uuid4()),
+                "tenant_id": str(uuid4()),
+                "user_id": str(uuid4()),
+            },
+            files={"file": ("test.txt", b"content", "text/plain")}
+        )
+        
+        # Should succeed
+        assert response.status_code in [200, 201]
+
+
+# ===== Test loaders/base.py abstract method (line 35) =====
+def test_base_loader_abstract_method():
+    """Test base loader abstract method cannot be called directly."""
+    from eva_rag.loaders.base import DocumentLoader
+    from io import BytesIO
+    
+    # Cannot instantiate abstract class directly
+    with pytest.raises(TypeError, match="Can't instantiate abstract class"):
+        loader = DocumentLoader()

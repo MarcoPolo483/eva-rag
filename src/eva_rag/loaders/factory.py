@@ -3,9 +3,15 @@ from pathlib import Path
 from typing import BinaryIO
 
 from eva_rag.loaders.base import DocumentLoader, ExtractedDocument
+from eva_rag.loaders.csv_loader import CSVLoader
 from eva_rag.loaders.docx_loader import DOCXLoader
+from eva_rag.loaders.excel_loader import ExcelLoader
+from eva_rag.loaders.html_loader import HTMLLoader
+from eva_rag.loaders.mpp_loader import MSProjectLoader
 from eva_rag.loaders.pdf_loader import PDFLoader
+from eva_rag.loaders.pptx_loader import PowerPointLoader
 from eva_rag.loaders.text_loader import TextLoader
+from eva_rag.loaders.xml_loader import XMLLoader
 
 
 class LoaderFactory:
@@ -16,6 +22,15 @@ class LoaderFactory:
         ".docx": DOCXLoader,
         ".txt": TextLoader,
         ".md": TextLoader,
+        ".html": HTMLLoader,
+        ".htm": HTMLLoader,
+        ".xml": XMLLoader,
+        ".csv": CSVLoader,
+        ".xlsx": ExcelLoader,
+        ".xls": ExcelLoader,
+        ".pptx": PowerPointLoader,
+        ".ppt": PowerPointLoader,
+        ".mpp": MSProjectLoader,  # MS Project XML format
     }
     
     @classmethod
