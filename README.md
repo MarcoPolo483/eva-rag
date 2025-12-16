@@ -222,3 +222,5 @@ Marco Presta - marco@evasuite.com
 <!-- Quality gate smoke test -->
 
 <!-- Trigger refresh -->
+
+<!-- Trigger with fixed branch -->
