@@ -218,3 +218,9 @@ Proprietary - EVA Suite © 2025
 Marco Presta - marco@evasuite.com
 
 <!-- Phase 3 enforcement system test -->
+
+<!-- Quality gate smoke test -->
+
+<!-- Trigger refresh -->
+
+<!-- Trigger with fixed branch -->
