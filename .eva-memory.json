@@ -68,6 +68,8 @@
       "Cache embeddings in Redis by content hash (60%+ cache hit rate, reduce costs)",
       "Hybrid search (vector + BM25) with RRF fusion outperforms pure vector search",
       "Rerank top-20 results with cross-encoder (filter < 0.5 relevance score)"
+      ,
+      "✅ Structural compliance (Dec 30, 2025): Added .eva-manifest.json + LICENSE; validator PASS (32/32 folders, 5/5 files); stashed untracked ingestion samples with longpaths enabled; repo status clean for push."
     ],
     "tools": [
       "FastAPI (async API endpoints, OpenAPI auto-docs)",
